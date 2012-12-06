@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xmlns:amq="http://activemq.apache.org/schema/core"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
+
+    <jaxrs:server id="rest" address="/">
+        <jaxrs:serviceBeans>
+            <ref bean="stanfordNlpService" />
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+    <bean id="stanfordNlpService"
+        class="com.mothsoft.alexis.stanford.service.StanfordNLPService" />
+
+    <!-- JMS -->
+    <bean id="jmsConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+        destroy-method="stop">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL" value="tcp://localhost:61616" />
+                <property name="dispatchAsync" value="true" />
+            </bean>
+        </property>
+    </bean>
+
+    <!-- this is the Message Driven POJO (MDP) -->
+    <bean id="parseRequestMessageListener"
+        class="com.mothsoft.alexis.stanford.jms.ParseRequestMessageListener" />
+
+    <amq:queue id="stanfordRequestQueue" physicalName="queue.stanford.request"
+        name="queue.stanford.request" />
+
+    <bean id="jmsContainer"
+        class="org.springframework.jms.listener.DefaultMessageListenerContainer"
+        destroy-method="destroy">
+        <property name="connectionFactory" ref="jmsConnectionFactory" />
+        <property name="destination" ref="stanfordRequestQueue" />
+        <property name="messageListener" ref="parseRequestMessageListener" />
+        <property name="sessionTransacted" value="false" />
+    </bean>
+
+</beans>
