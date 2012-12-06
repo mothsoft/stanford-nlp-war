@@ -18,6 +18,6 @@ Push the WAR to any Java servlet container as stanford.war
 
 Executing
 =============
--Simple HTML test: Browse to /stanford and provide a text document via the HTML form
--REST: POST a text document to /stanford/parser
--JMS: Mainly an integration point for OpenAlexis, but you can reverse engineer the queue and message format by reviewing ParseRequestMessageListener.java
+* Simple HTML test: Browse to /stanford and provide a text document via the HTML form
+* REST: POST a text document to /stanford/parser
+* JMS: Mainly an integration point for OpenAlexis, but you can reverse engineer the queue and message format by reviewing ParseRequestMessageListener.java
