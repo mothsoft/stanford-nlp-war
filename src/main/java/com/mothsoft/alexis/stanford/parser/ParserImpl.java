@@ -98,8 +98,7 @@ class ParserImpl implements Parser {
         synchronized (ParserImpl.class) {
             TOKENIZER_FACTORY = PTBTokenizer.factory(false, new WordTokenFactory());
             TOKENIZER_OPTIONS = "asciiQuotes=true,escapeForwardSlashAsterisk=false";
-            TREE_PRINT = new TreePrint("wordsAndTags,typedDependencies", "xml,basicDependencies",
-                    new PennTreebankLanguagePack());
+            TREE_PRINT = new TreePrint("wordsAndTags", "xml", new PennTreebankLanguagePack());
             PARSER = LexicalizedParser
                     .getParserFromSerializedFile("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
             try {
@@ -188,7 +187,7 @@ class ParserImpl implements Parser {
             final Tree tree = PARSER.parseTree(sentence);
             TREE_PRINT.printTree(tree, printWriter);
         } catch (Exception e) {
-            logger.severe("Encountered Exception - may be swalled OutOfMemoryError in Stanford NLP - will try cleanup!");
+            logger.severe("Encountered Exception - may be swallowed OutOfMemoryError in Stanford NLP - will try cleanup!");
             e.printStackTrace(System.err);
 
             // trying to reinitialize
