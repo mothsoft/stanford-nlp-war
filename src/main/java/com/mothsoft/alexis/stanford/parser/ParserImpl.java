@@ -98,7 +98,8 @@ class ParserImpl implements Parser {
         synchronized (ParserImpl.class) {
             TOKENIZER_FACTORY = PTBTokenizer.factory(false, new WordTokenFactory());
             TOKENIZER_OPTIONS = "asciiQuotes=true,escapeForwardSlashAsterisk=false";
-            TREE_PRINT = new TreePrint("wordsAndTags", "xml", new PennTreebankLanguagePack());
+            TREE_PRINT = new TreePrint("wordsAndTags,typedDependencies", "xml,basicDependencies",
+                    new PennTreebankLanguagePack());
             PARSER = LexicalizedParser
                     .getParserFromSerializedFile("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
             try {
