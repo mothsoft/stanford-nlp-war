@@ -57,7 +57,7 @@ public class ParseRequestMessageListener implements SessionAwareMessageListener<
     public void onMessage(final TextMessage message, final Session session) throws JMSException {
         final String text = ((TextMessage) message).getText();
         final Destination replyTo = message.getJMSReplyTo();
-        final Long documentId = message.getLongProperty(DOCUMENT_ID);
+        final String documentId = message.getStringProperty(DOCUMENT_ID);
         MessageProducer producer = null;
 
         final String parsed;
@@ -67,7 +67,7 @@ public class ParseRequestMessageListener implements SessionAwareMessageListener<
             producer = session.createProducer(replyTo);
         } catch (final Exception e) {
             final TextMessage errorResponse = session.createTextMessage(e.getMessage());
-            errorResponse.setLongProperty(DOCUMENT_ID, documentId);
+            errorResponse.setStringProperty(DOCUMENT_ID, documentId);
             errorResponse.setBooleanProperty(EXCEPTION, true);
             producer.send(errorResponse);
             return;
@@ -79,12 +79,12 @@ public class ParseRequestMessageListener implements SessionAwareMessageListener<
 
         // create and send response
         final TextMessage response = session.createTextMessage(parsed);
-        response.setLongProperty(DOCUMENT_ID, documentId);
+        response.setStringProperty(DOCUMENT_ID, documentId);
         producer.send(response);
         producer.close();
     }
 
-    private String parse(final long documentId, final String text) {
+    private String parse(final String documentId, final String text) {
         final StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
