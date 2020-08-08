@@ -54,7 +54,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <classpathPrefix />
+                            <classpathPrefix/>
                         </manifest>
                     </archive>
                 </configuration>
@@ -142,7 +142,7 @@
         <dependency>
             <groupId>org.apache.xbean</groupId>
             <artifactId>xbean-spring</artifactId>
-            <version>3.9</version>
+            <version>3.18</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
